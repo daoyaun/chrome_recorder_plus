@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chrome Recorder Plus</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 360px; height: 400px;
+      font-family: "Segoe UI", "PingFang SC", sans-serif;
+      font-size: 13px;
+      background: #1e1e2e;
+      color: #cdd6f4;
+      overflow: hidden;
+      user-select: none;
+    }
+    .container { display: flex; flex-direction: column; height: 100%; padding: 16px; gap: 10px; }
+
+    /* 标题行 */
+    .title-row { display: flex; align-items: center; gap: 8px; }
+    .title-row h1 { font-size: 14px; font-weight: 600; color: #89b4fa; flex: 1; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #45475a; flex-shrink: 0; }
+    .dot.recording { background: #f38ba8; box-shadow: 0 0 6px #f38ba8; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    .status { font-size: 12px; color: #a6adc8; min-height: 18px; }
+    .status.rec { color: #f38ba8; }
+
+    /* 计数 */
+    .count-row {
+      font-size: 38px; font-weight: 700; color: #cdd6f4;
+      text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin: 4px 0;
+    }
+    .count-row span { font-size: 12px; color: #6c7086; font-weight: 400; }
+
+    /* 域名 */
+    #domainBar {
+      font-size: 12px; color: #a6e3a1;
+      min-height: 16px;
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+    }
+
+    /* 按钮 */
+    .btn-row { display: flex; gap: 8px; }
+    button {
+      flex: 1; padding: 8px 0;
+      border: none; border-radius: 8px;
+      cursor: pointer; font-size: 13px; font-weight: 600;
+      transition: opacity .15s, transform .1s;
+    }
+    button:active { transform: scale(.97); }
+    button:disabled { opacity: .35; cursor: default; }
+    .btn-start  { background: #a6e3a1; color: #1e1e2e; }
+    .btn-stop   { background: #f38ba8; color: #1e1e2e; }
+    .btn-output {
+      margin-top: 2px; padding: 10px 0;
+      border: 1px dashed #45475a; border-radius: 8px;
+      background: #181825; color: #a6adc8;
+      font-size: 15px; font-weight: 600;
+    }
+    .btn-output:hover:not(:disabled) { background: #202236; }
+    .btn-output:disabled { opacity: .4; color: #6c7086; border-color: #3b3f5a; }
+
+    .msg { font-size: 11px; color: #a6adc8; min-height: 16px; text-align: center; }
+    .msg.err { color: #f38ba8; }
+
+    /* 步骤预览 */
+    .preview {
+      flex: 1; overflow-y: auto;
+      background: #181825; border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 11px; color: #585b70;
+      font-family: "Cascadia Code", "Consolas", monospace;
+    }
+    .preview .step { padding: 1px 0; border-bottom: 1px solid #1e1e2e; }
+    .preview .step:last-child { border-bottom: none; }
+    .t-nav    { color: #89b4fa; }
+    .t-click  { color: #a6e3a1; }
+    .t-change { color: #f9e2af; }
+    .t-key    { color: #cba6f7; }
+    .t-vp     { color: #94e2d5; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title-row">
+      <div class="dot" id="dot"></div>
+      <h1>Chrome Recorder Plus</h1>
+    </div>
+
+    <div class="status" id="status">空闲，等待开始录制</div>
+    <div id="domainBar"></div>
+
+    <div class="count-row">
+      <span id="count">0</span>
+      <span>事件</span>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-start" id="btnStart">▶ 开始录制</button>
+      <button class="btn-stop"  id="btnStop"  disabled>■ 停止</button>
+    </div>
+
+    <div class="preview" id="preview"><span style="color:#3b3f5a">录制步骤将显示在此处...</span></div>
+
+    <button class="btn-output" id="btnOutput" disabled>⬇ 导出 JSON</button>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <script src="panel.js"></script>
+</body>
+</html>

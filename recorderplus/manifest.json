@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Chrome Recorder Plus",
+  "version": "1.0.0",
+  "description": "录制器增强版：生成含 clientX/Y、ocr_hint、_coord_* 等全字段 JSON，直接供 universal_runner 使用",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs",
+    "windows",
+    "downloads"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_script.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_title": "Chrome Recorder Plus"
+  }
+}
